@@ -1806,6 +1806,7 @@ static bool _is_same_nozzle_diameters(MachineObject* obj, float &tag_nozzle_diam
     {
         PartPlate* cur_plate = wxGetApp().plater()->get_partplate_list().get_curr_plate();
         auto used_filament_idxs = cur_plate->get_used_filaments();/*the index is started from 1*/
+        const std::vector<int>& filament_maps = cur_plate->get_real_filament_maps(preset_bundle->full_config());
         for (int used_filament_idx : used_filament_idxs)
         {
             int used_nozzle_idx = cur_plate->get_physical_extruder_by_filament_id(preset_bundle->full_config(), used_filament_idx);
@@ -1815,7 +1816,8 @@ static bool _is_same_nozzle_diameters(MachineObject* obj, float &tag_nozzle_diam
                 return false;
             }
 
-            tag_nozzle_diameter = float(opt_nozzle_diameters->get_at(used_nozzle_idx));
+            int logical_extruder_idx = filament_maps[used_filament_idx - 1] - 1;/*0-based logical extruder*/
+            tag_nozzle_diameter = float(opt_nozzle_diameters->get_at(logical_extruder_idx));
             auto machine_nozzle_diameter = obj->GetExtderSystem()->GetNozzleDiameter(used_nozzle_idx);
 
             // Assume matching if diameter is unknown
