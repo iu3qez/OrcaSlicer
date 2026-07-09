@@ -4,6 +4,8 @@ endif()
 
 cmake_minimum_required(VERSION 3.13)
 
+# See AGENTS.md ("Build Commands" / "CI") for the two-phase deps+app build and the
+# GitHub Actions workflow chain that consumes this file.
 
 # The following line used to be in tests/CMakeLists.txt
 # Having it there causes rebuilds of all targets on any CMakeLists.txt change under tests/
